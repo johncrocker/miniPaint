@@ -18,4 +18,3 @@ COPY --from=build /usr/src/app/index.html /usr/share/caddy/html
 COPY --from=build /usr/src/app/images /usr/share/caddy/html/images
 
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]

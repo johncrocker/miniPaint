@@ -9,13 +9,13 @@ RUN npm install
 COPY . /usr/src/app
 RUN npm run build
 
-FROM nginx:stable-alpine AS production
-COPY nginx.conf /etc/nginx/nginx.conf
-#COPY minipaint.conf /etc/nginx/conf.d/minipaint.conf
+FROM caddy:alpine AS production
+COPY Caddyfile /etc/caddy/Caddyfile
 
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html/dist
-COPY --from=build /usr/src/app/index.html /usr/share/nginx/html
-COPY --from=build /usr/src/app/images /usr/share/nginx/html/images
+RUN mkdir -p /usr/share/caddy/html
+COPY --from=build /usr/src/app/dist /usr/share/caddy/html/dist
+COPY --from=build /usr/src/app/index.html /usr/share/caddy/html
+COPY --from=build /usr/src/app/images /usr/share/caddy/html/images
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
